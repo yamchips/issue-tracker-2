@@ -1,8 +1,8 @@
-import { StatusBadge } from "@/app/components";
 import { prisma } from "@/prisma/client";
-import { Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
+import { Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
+import IssueDetail from "./IssueDetail";
+import IssueEditBtn from "./IssueEditBtn";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -14,18 +14,13 @@ const IssueDetailPage = async ({ params }: Props) => {
   const issue = await prisma.issue.findUnique({ where: { id: issueId } });
   if (!issue) return notFound();
   return (
-    <Grid columns={"5"} gap="3">
-      <Flex className="max-w-xl col-span-4" direction="column" gap="3">
-        <Heading>{issue.title}</Heading>
-        <Flex gap="3" align="center">
-          <StatusBadge status={issue.status} />
-          <Text>{issue.createdAt.toDateString()}</Text>
-        </Flex>
-        <Card className="prose">
-          <ReactMarkdown>{issue.description}</ReactMarkdown>
-        </Card>
+    <Grid columns={{ initial: "1", sm: "5" }} gap="3">
+      <Flex className="md:col-span-4" gap={"4"} direction={"column"}>
+        <IssueDetail issue={issue} />
       </Flex>
-      <Flex>Edit Panel</Flex>
+      <Flex direction={"column"} gap={"4"}>
+        <IssueEditBtn issue={issue} />
+      </Flex>
     </Grid>
   );
 };
