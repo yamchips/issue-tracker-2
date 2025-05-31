@@ -1,7 +1,6 @@
-import CustomLink from "@/app/components/CustomLink";
+import { StatusBadge, CustomLink } from "@/app/components";
 import { Issue } from "@prisma/client";
 import { Table } from "@radix-ui/themes";
-import StatusBadge from "../../components/StatusBadge";
 
 const IssueTable = ({ issues }: { issues: Issue[] }) => {
   return (
@@ -22,9 +21,7 @@ const IssueTable = ({ issues }: { issues: Issue[] }) => {
         {issues.map((issue) => (
           <Table.Row key={issue.id}>
             <Table.Cell>
-              <CustomLink href={"/issues/" + issue.id}>
-                {issue.title}
-              </CustomLink>
+              <CustomLink href={"/issues/" + issue.id} name={issue.title} />
             </Table.Cell>
             <Table.Cell>
               <StatusBadge status={issue.status} />

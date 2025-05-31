@@ -1,17 +1,19 @@
 import { Link as RadixLink } from "@radix-ui/themes";
 
 import Link from "next/link";
+import { ComponentProps } from "react";
 
-interface Props {
-  href: string;
-  children: string;
+interface Props extends ComponentProps<typeof Link> {
+  name: string;
 }
 
-const CustomLink = ({ href, children }: Props) => {
+const CustomLink = ({ href, name, ...props }: Props) => {
   return (
-    <Link href={href} passHref legacyBehavior>
-      <RadixLink>{children}</RadixLink>
-    </Link>
+    <RadixLink asChild>
+      <Link href={href} {...props}>
+        {name}
+      </Link>
+    </RadixLink>
   );
 };
 

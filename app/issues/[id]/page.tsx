@@ -1,4 +1,4 @@
-import StatusBadge from "@/app/components/StatusBadge";
+import { StatusBadge } from "@/app/components";
 import { prisma } from "@/prisma/client";
 import { Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
@@ -15,7 +15,7 @@ const IssueDetailPage = async ({ params }: Props) => {
   if (!issue) return notFound();
   return (
     <Grid columns={"5"} gap="3">
-      <Flex className="col-span-4" direction="column" gap="3">
+      <Flex className="max-w-xl col-span-4" direction="column" gap="3">
         <Heading>{issue.title}</Heading>
         <Flex gap="3" align="center">
           <StatusBadge status={issue.status} />
