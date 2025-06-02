@@ -6,12 +6,12 @@ import { FaPencilAlt } from "react-icons/fa";
 
 const IssueEditBtn = ({ issue }: { issue: Issue }) => {
   return (
-    <Link href={`/issues/edit/${issue.id}`}>
-      <Button className="max-w-[200px]">
+    <Button asChild>
+      <Link href={`/issues/edit/${issue.id}`}>
         <FaPencilAlt />
         Edit Issue
-      </Button>
-    </Link>
+      </Link>
+    </Button>
   );
 };
 

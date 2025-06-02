@@ -31,3 +31,19 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   });
   return NextResponse.json(response, { status: 200 });
 }
+
+export async function DELETE(request: NextRequest, { params }: Props) {
+  const { id } = await params;
+  const issueId = parseInt(id);
+  if (isNaN(issueId)) {
+    return NextResponse.json({ error: "Invalid endpoint" }, { status: 400 });
+  }
+
+  const issue = await prisma.issue.findUnique({ where: { id: issueId } });
+  if (!issue) {
+    return NextResponse.json({ error: "Issue not found" }, { status: 404 });
+  }
+
+  const deletedIssue = await prisma.issue.delete({ where: { id: issueId } });
+  return NextResponse.json(deletedIssue, { status: 200 });
+}
