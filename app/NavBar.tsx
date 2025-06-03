@@ -1,9 +1,10 @@
 "use client";
-import { Container, Flex, Text } from "@radix-ui/themes";
+import { Avatar, Container, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBug } from "react-icons/fa";
+import { useSession } from "next-auth/react";
 
 const NavBar = () => {
   return (
@@ -16,7 +17,7 @@ const NavBar = () => {
             </Link>
             <NavLinks />
           </Flex>
-          <Text>Log in</Text>
+          <AuthStatus />
         </Flex>
       </Container>
     </nav>
@@ -35,15 +36,9 @@ const NavLinks = () => {
         <li key={link.name}>
           <Link
             href={link.href}
-            className={classNames(
-              "nav-link",
-              "text-zinc-500",
-              "hover:text-zinc-800",
-              "transition-colors",
-              {
-                "text-zinc-900": link.href === currentPath,
-              }
-            )}
+            className={classNames("nav-link", {
+              "!text-zinc-900": link.href === currentPath,
+            })}
           >
             {link.name}
           </Link>
@@ -52,4 +47,38 @@ const NavLinks = () => {
     </ul>
   );
 };
+
+const AuthStatus = () => {
+  const { data, status } = useSession();
+  if (status === "loading")
+    return <div className="w-8 h-8 bg-gray-200 rounded-full" />;
+  if (status === "unauthenticated")
+    return (
+      <Link className="nav-link" href={"/api/auth/signin"}>
+        Log in
+      </Link>
+    );
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Avatar
+          src={data?.user?.image || "/defaultUser.png"}
+          fallback={"?"}
+          radius="full"
+          size="2"
+          referrerPolicy="no-referrer"
+        />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Label>
+          <Text size={"2"}>{data?.user?.email}</Text>
+        </DropdownMenu.Label>
+        <DropdownMenu.Item>
+          <Link href={"/api/auth/signout"}>Log out</Link>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+};
+
 export default NavBar;
