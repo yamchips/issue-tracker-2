@@ -1,5 +1,5 @@
 import authOptions from "@/app/auth/AuthOption";
-import { issuePostSchema } from "@/app/validationSchema";
+import { issuePatchSchema } from "@/app/validationSchema";
 import { prisma } from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,16 +15,29 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   }
 
   const body = await request.json();
-  const validation = issuePostSchema.safeParse(body);
+  const validation = issuePatchSchema.safeParse(body);
   if (!validation.success) {
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
-  console.log(body.title, body.description);
 
   const { id } = await params;
   const issueId = parseInt(id);
   if (isNaN(issueId)) {
     return NextResponse.json({ error: "Invalid endpoint" }, { status: 400 });
+  }
+
+  const { assignedUserId } = body;
+
+  if (assignedUserId) {
+    const user = await prisma.user.findUnique({
+      where: { id: assignedUserId },
+    });
+    if (!user) {
+      return NextResponse.json(
+        { error: "User doesn't exist" },
+        { status: 400 }
+      );
+    }
   }
 
   const issue = await prisma.issue.findUnique({ where: { id: issueId } });
@@ -34,7 +47,7 @@ export async function PATCH(request: NextRequest, { params }: Props) {
 
   const response = await prisma.issue.update({
     where: { id: issueId },
-    data: { title: body.title, description: body.description },
+    data: validation.data,
   });
   return NextResponse.json(response, { status: 200 });
 }
