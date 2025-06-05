@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { statuses } from "./issues/[id]/StatusSelector";
 
 export const issuePostSchema = z.object({
   title: z
@@ -28,4 +29,5 @@ export const issuePatchSchema = z.object({
     .max(255)
     .optional()
     .nullable(),
+  status: z.enum(["OPEN", "CLOSED", "IN_PROGRESS"]).optional(),
 });

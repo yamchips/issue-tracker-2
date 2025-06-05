@@ -7,6 +7,7 @@ import IssueDeleteBtn from "./IssueDeleteBtn";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/AuthOption";
 import AssigneeSelector from "./AssigneeSelector";
+import StatusSelector from "./StatusSelector";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -26,6 +27,7 @@ const IssueDetailPage = async ({ params }: Props) => {
       {session && (
         <Flex direction="column" gap="3" maxWidth={"200px"}>
           <AssigneeSelector issue={issue} />
+          <StatusSelector issue={issue} />
           <IssueEditBtn issue={issue} />
           <IssueDeleteBtn issue={issue} />
         </Flex>
@@ -33,5 +35,7 @@ const IssueDetailPage = async ({ params }: Props) => {
     </Grid>
   );
 };
+
+export const dynamic = "force-dynamic";
 
 export default IssueDetailPage;
