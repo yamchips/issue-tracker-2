@@ -1,12 +1,11 @@
 "use client";
 
-import { Issue, Status } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
-
-export const statuses: Status[] = Object.values(Status);
+import statuses from "../_components/Statuses";
 
 const StatusSelector = ({ issue }: { issue: Issue }) => {
   const router = useRouter();
