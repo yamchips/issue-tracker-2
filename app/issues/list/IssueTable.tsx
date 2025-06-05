@@ -8,6 +8,7 @@ export interface IssueQuery {
   status: Status;
   orderBy: keyof Issue;
   sortOrder: "asc" | "desc";
+  page: string;
 }
 
 interface Props {

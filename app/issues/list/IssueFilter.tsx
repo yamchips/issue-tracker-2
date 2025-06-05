@@ -34,7 +34,7 @@ const IssueFilter = () => {
       value={searchParams.get("status") || "all"}
       onValueChange={updateURL}
     >
-      <Select.Trigger placeholder="Filter issues by ..." />
+      <Select.Trigger />
       <Select.Content>
         {categories.map((category) => (
           <Select.Item key={category.name} value={category.value}>
